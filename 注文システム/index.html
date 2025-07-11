@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>おやつ注文フォーム</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+    background-color: #f0f8ff;
+}
+h2 {
+    text-align: center;
+    color: #333;
+}
+label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+select, input, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+button {
+    background-color: #00c300;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+#message {
+    text-align: center;
+    font-weight: bold;
+}
+.success { color: green; }
+.error { color: red; }
+</style>
+</head>
+<body>
+<h2>おやつ注文フォーム</h2>
+
+<label for="room">職員室</label>
+<select id="room">
+<option value="1年職員室">1年職員室</option>
+<option value="2年職員室">2年職員室</option>
+<option value="3年職員室">3年職員室</option>
+</select>
+
+<label for="item">商品名</label>
+<select id="item">
+<option value="午後の紅茶">午後の紅茶</option>
+<option value="おーいお茶">おーいお茶</option>
+<option value="ポッキー">ポッキー</option>
+<option value="チョコパイ">チョコパイ</option>
+</select>
+
+<label for="quantity">数量</label>
+<input type="number" id="quantity" min="1" value="1">
+
+<button id="submit">注文する</button>
+<p id="message"></p>
+
+<script>
+const GAS_ENDPOINT = "【あなたのGASのURLに変更してください】";
+
+async function sendOrder(userName) {
+    const room = document.getElementById("room").value;
+    const item = document.getElementById("item").value;
+    const quantity = document.getElementById("quantity").value;
+
+    const payload = {
+    name: userName,
+    room: room,
+    item: item,
+    quantity: Number(quantity)
+    };
+
+    try {
+    await fetch(GAS_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+    document.getElementById("message").textContent = "✅ 注文を受け付けました！";
+    document.getElementById("message").className = "success";
+    } catch (error) {
+    document.getElementById("message").textContent = "❌ 注文に失敗しました。";
+    document.getElementById("message").className = "error";
+    }
+}
+
+    document.getElementById("submit").addEventListener("click", async () => {
+      try {
+        await liff.init({ liffId: "【あなたのLIFF IDに変更してください】" });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          const profile = await liff.getProfile();
+          sendOrder(profile.displayName);
+        }
+      } catch (err) {
+        console.error("LIFFエラー:", err);
+        document.getElementById("message").textContent = "❌ LINEログインに失敗しました。";
+        document.getElementById("message").className = "error";
+      }
+    });
+  </script>
+</body>
+</html>
