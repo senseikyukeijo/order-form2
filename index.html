@@ -70,7 +70,7 @@ button {
 <p id="message"></p>
 
 <script>
-const GAS_ENDPOINT = "【あなたのGASのURLに変更してください】";
+const GAS_ENDPOINT = "https://script.google.com/a/macros/ict.shimanet.ed.jp/s/AKfycbznWVKcOsw5pjzqDDnMXL_jQ4q5uVqbXPOJ7MDoM4AWjVDhJ5xg8tI139hVosFNoT-W/exec";
 
 async function sendOrder(userName) {
     const room = document.getElementById("room").value;
@@ -101,7 +101,7 @@ async function sendOrder(userName) {
 
     document.getElementById("submit").addEventListener("click", async () => {
       try {
-        await liff.init({ liffId: "【あなたのLIFF IDに変更してください】" });
+        await liff.init({ liffId: "2007745256-KXG1rRRN" });
         if (!liff.isLoggedIn()) {
           liff.login();
         } else {
